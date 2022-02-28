@@ -1,0 +1,125 @@
+import requests
+from lxml import html
+import time
+
+hdr = {'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',}
+
+url1='https://www.vesselfinder.com/vessels/CHRIS.-DE-MARGERIE-IMO-9737187-MMSI-212611000'
+url2='https://www.vesselfinder.com/vessels/BORIS-VILKITSKY-IMO-9768368-MMSI-212654000'
+url3='https://www.vesselfinder.com/vessels/VLADIMIR-RUSANOV-IMO-9750701-MMSI-477150100'
+url4='https://www.vesselfinder.com/vessels/FEDOR-LITKE-IMO-9768370-MMSI-212660000'
+url5='https://www.vesselfinder.com/vessels/EDUARD-TOLL-IMO-9750696-MMSI-311000548'
+url6='https://www.vesselfinder.com/vessels/RUDOLF-SAMOYLOVICH-IMO-9750713-MMSI-311000627'
+url7='https://www.vesselfinder.com/vessels/VLADIMIR-VIZE-IMO-9750658-MMSI-477194200'
+url8='https://www.vesselfinder.com/vessels/GEORGIY-BRUSILOV-IMO-9768382-MMSI-212770000'
+url9='https://www.vesselfinder.com/vessels/BORIS-DAVYDOV-IMO-9768394-MMSI-209356000'
+url10='https://www.vesselfinder.com/vessels/NIKOLAY-ZUBOV-IMO-9768526-MMSI-209351000'
+url11='https://www.vesselfinder.com/vessels/NIKOLAY-YEVGENOV-IMO-9750725-MMSI-311000631'
+url12='https://www.vesselfinder.com/vessels/VLADIMIR-VORONIN-IMO-9750737-MMSI-311000632'
+url13='https://www.vesselfinder.com/vessels/NIKOLAY-URVANTSEV-IMO-9750660-MMSI-477327300'
+url14='https://www.vesselfinder.com/vessels/GEORGIY-USHAKOV-IMO-9750749-MMSI-311000633'
+url15='https://www.vesselfinder.com/vessels/YAKOV-GAKKEL-IMO-9750672-MMSI-311000634'
+url='https://www.vesselfinder.com/vessels/BORIS-VILKITSKY-IMO-9768368-MMSI-212654000'
+
+list_of_urls=['https://www.vesselfinder.com/vessels/CHRIS.-DE-MARGERIE-IMO-9737187-MMSI-212611000',
+              'https://www.vesselfinder.com/vessels/BORIS-VILKITSKY-IMO-9768368-MMSI-212654000',
+              'https://www.vesselfinder.com/vessels/VLADIMIR-RUSANOV-IMO-9750701-MMSI-477150100',
+              'https://www.vesselfinder.com/vessels/FEDOR-LITKE-IMO-9768370-MMSI-212660000',
+              'https://www.vesselfinder.com/vessels/EDUARD-TOLL-IMO-9750696-MMSI-311000548',
+              'https://www.vesselfinder.com/vessels/RUDOLF-SAMOYLOVICH-IMO-9750713-MMSI-311000627',
+              'https://www.vesselfinder.com/vessels/VLADIMIR-VIZE-IMO-9750658-MMSI-477194200',
+              'https://www.vesselfinder.com/vessels/GEORGIY-BRUSILOV-IMO-9768382-MMSI-212770000',
+              'https://www.vesselfinder.com/vessels/BORIS-DAVYDOV-IMO-9768394-MMSI-209356000',
+              'https://www.vesselfinder.com/vessels/NIKOLAY-ZUBOV-IMO-9768526-MMSI-209351000',
+              'https://www.vesselfinder.com/vessels/NIKOLAY-YEVGENOV-IMO-9750725-MMSI-311000631',
+              'https://www.vesselfinder.com/vessels/VLADIMIR-VORONIN-IMO-9750737-MMSI-311000632',
+              'https://www.vesselfinder.com/vessels/NIKOLAY-URVANTSEV-IMO-9750660-MMSI-477327300',
+              'https://www.vesselfinder.com/vessels/GEORGIY-USHAKOV-IMO-9750749-MMSI-311000633',
+              'https://www.vesselfinder.com/vessels/YAKOV-GAKKEL-IMO-9750672-MMSI-311000634']
+
+list_of_urls2=['https://www.vesselfinder.com/vessels/CHRIS.-DE-MARGERIE-IMO-9737187-MMSI-212611000',
+              'https://www.vesselfinder.com/vessels/BORIS-VILKITSKY-IMO-9768368-MMSI-212654000',
+              'https://www.vesselfinder.com/vessels/VLADIMIR-RUSANOV-IMO-9750701-MMSI-477150100',
+              'https://www.vesselfinder.com/vessels/FEDOR-LITKE-IMO-9768370-MMSI-212660000',
+              'https://www.vesselfinder.com/vessels/EDUARD-TOLL-IMO-9750696-MMSI-311000548',
+              'https://www.vesselfinder.com/vessels/RUDOLF-SAMOYLOVICH-IMO-9750713-MMSI-311000627',
+              'https://www.vesselfinder.com/vessels/VLADIMIR-VIZE-IMO-9750658-MMSI-477194200',
+              'https://www.vesselfinder.com/vessels/GEORGIY-BRUSILOV-IMO-9768382-MMSI-212770000',
+              'https://www.vesselfinder.com/vessels/BORIS-DAVYDOV-IMO-9768394-MMSI-209356000',
+              'https://www.vesselfinder.com/vessels/NIKOLAY-ZUBOV-IMO-9768526-MMSI-209351000',
+              'https://www.vesselfinder.com/vessels/NIKOLAY-YEVGENOV-IMO-9750725-MMSI-311000631',
+              'https://www.vesselfinder.com/vessels/VLADIMIR-VORONIN-IMO-9750737-MMSI-311000632',
+              'https://www.vesselfinder.com/vessels/NIKOLAY-URVANTSEV-IMO-9750660-MMSI-477327300',
+              'https://www.vesselfinder.com/vessels/GEORGIY-USHAKOV-IMO-9750749-MMSI-311000633',
+              'https://www.vesselfinder.com/vessels/YAKOV-GAKKEL-IMO-9750672-MMSI-311000634']
+def vesselfinder(urlz):
+    resp = requests.get(urlz,headers=hdr)
+    tree = html.fromstring(resp.content)
+    vessel_name=tree.xpath('/html/body/div[1]/div/main/div/div[1]/div/div[2]/h1')
+    #next_port = tree.xpath('/html/body/div[1]/div/main/div/section[1]/div/div[2]/div/div[1]/div[2]/a')
+    #ETA_of_next_port=tree.xpath('/html/body/div[1]/div/main/div/section[1]/div/div[2]/div/div[1]/div[2]/div/span[1]')
+    last_position_received_days_ago = tree.xpath('//*[@id="lastrep"]/span[1]')
+    #last_port_of_call=tree.xpath('//*[@id="port-calls"]/div[1]/a')
+    #ETA_of_last_port=tree.xpath('//*[@id="port-calls"]/div[1]/div/div[1]/div[2]')
+    #ETD_of_last_port=tree.xpath('//*[@id="port-calls"]/div[1]/a') 
+    Previous_port=tree.xpath('//*[@id="agr2"]/div/div[2]/a')
+    previous_port_time=tree.xpath('//*[@id="agr2"]/div/div[2]/div')
+    upcoming_port=tree.xpath('/html/body/div[1]/div/main/div/section[1]/div/div[2]/div/div[1]/div[2]/a')
+    #upcoming_port2=tree.xpath('/html/body/div[1]/div/main/div/section[1]/div/div[2]/div/div[1]/div[2]/div[1]')
+    upcoming_port_time=tree.xpath('/html/body/div[1]/div/main/div/section[1]/div/div[2]/div/div[1]/div[2]/div/span[1]')
+    #upcoming_port_time2=tree.xpath('/html/body/div[1]/div/main/div/section[1]/div/div[2]/div/div[1]/div[2]/div[2]/span[1]')
+    year_of_build=tree.xpath('/html/body/div[1]/div/main/div/section[4]/table/tbody/tr/td[3]')
+    
+    for a,b,c,d,e,f,g in zip(vessel_name,Previous_port,previous_port_time,upcoming_port,upcoming_port_time,last_position_received_days_ago,year_of_build):
+        print(a.text)
+        print('Last port ',b.text,'',c.text)
+        print('Upcoming port ',d.text,'',e.text)
+        #print(d.text,'',e.text)
+        print("Position received ",f.text)
+        print('Year of delivery ',g.text)
+        print('')
+        
+def vesselfinder2(urlz):
+    resp = requests.get(urlz,headers=hdr)
+    tree = html.fromstring(resp.content)
+    vessel_name=tree.xpath('/html/body/div[1]/div/main/div/div[1]/div/div[2]/h1')
+    #next_port = tree.xpath('/html/body/div[1]/div/main/div/section[1]/div/div[2]/div/div[1]/div[2]/a')
+    #ETA_of_next_port=tree.xpath('/html/body/div[1]/div/main/div/section[1]/div/div[2]/div/div[1]/div[2]/div/span[1]')
+    last_position_received_days_ago = tree.xpath('//*[@id="lastrep"]/span[1]')
+    last_port_of_call=tree.xpath('//*[@id="port-calls"]/div[1]/a')
+    #ETA_of_last_port=tree.xpath('//*[@id="port-calls"]/div[1]/div/div[1]/div[2]') 
+    #ETD_of_last_port=tree.xpath('//*[@id="port-calls"]/div[1]/a') 
+    Previous_port=tree.xpath('//*[@id="agr2"]/div/div[2]/a')
+    previous_port_time=tree.xpath('//*[@id="agr2"]/div/div[2]/div')
+    #upcoming_port=tree.xpath('/html/body/div[1]/div/main/div/section[1]/div/div[2]/div/div[1]/div[2]/a')
+    upcoming_port2=tree.xpath('/html/body/div[1]/div/main/div/section[1]/div/div[2]/div/div[1]/div[2]/div[1]') #ONLY 3 VESSELS
+    #upcoming_port_time=tree.xpath('/html/body/div[1]/div/main/div/section[1]/div/div[2]/div/div[1]/div[2]/div/span[1]')
+    upcoming_port_time2=tree.xpath('/html/body/div[1]/div/main/div/section[1]/div/div[2]/div/div[1]/div[2]/div[2]/span[1]')#ONLY 3 VESSELS 
+    year_of_build=tree.xpath('/html/body/div[1]/div/main/div/section[4]/table/tbody/tr/td[3]')
+                             
+    for a,b,c,d,e,f,g in zip(vessel_name,Previous_port,previous_port_time,upcoming_port2,upcoming_port_time2,last_position_received_days_ago,year_of_build):
+        print(a.text)
+        print('Last port ',b.text,'',c.text)
+        print('Upcoming port ',d.text,'',e.text)
+        #print(d.text,'',e.text)
+        print("Position received ",f.text)
+        print('Year of delivery ',g.text)
+        print('')
+    
+    for a,b,c,d,e in zip(vessel_name,Previous_port,previous_port_time,upcoming_port2,upcoming_port_time2):
+        print(a.text)
+        print(b.text,'',c.text)
+        print(d.text,'',e.text)
+        #print(d.text,'',e.text)
+        #print(f.text,'',g.text)
+        print('')
+
+for i in list_of_urls:
+    vesselfinder(i)
+    
+for i in list_of_urls2:
+    vesselfinder2(i)
+    
+    
+print('Done!')
+#https://hub.gke2.mybinder.org/user/ipython-ipython-in-depth-pj8y3x17/files/Untitled.ipynb?_xsrf=2%7C5467985d%7C8f27172befd44dda5991b87cb16c3c60%7C1637839576
